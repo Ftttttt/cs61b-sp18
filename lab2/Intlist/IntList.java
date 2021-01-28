@@ -89,11 +89,12 @@ public class IntList {
         }else if (B == null) {
             return A;
         }
-        while (A.rest != null) {
-            A = A.rest;
+        IntList ptr = A;
+        while (ptr != null) {
+            ptr = ptr.rest;
         }
         while (B != null) {
-            A.rest = B;
+            ptr = B;
             B = B.rest;
         }
         return A;
