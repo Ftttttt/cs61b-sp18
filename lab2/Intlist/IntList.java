@@ -89,8 +89,11 @@ public class IntList {
         }else if (B == null) {
             return A;
         }
+        while (A != null) {
+            A = A.rest;
+        }
         while (B != null) {
-            A.rest = B;
+            A = B;
             B = B.rest;
         }
         return A;
@@ -117,10 +120,10 @@ public class IntList {
             A = A.rest;
             ptr = ptr.rest;
         }
-        ptr.rest = new IntList(B.first, null);
+        ptr.rest.rest = new IntList(B.first, null);
         B = B.rest;
         while (B != null) {
-            ptr.rest = new IntList(B.first, null);
+            ptr.rest.rest = new IntList(B.first, null);
             B = B.rest;
             ptr = ptr.rest;
         }
