@@ -17,15 +17,15 @@ public class LinkedListDeque<T> {
 
     public LinkedListDeque() {
         size = 0;
-        sentF = new Node(88, null, null);
-        sentB = new Node(99, null, null);
+        sentF = new Node(null, null, null);
+        sentB = new Node(null, null, null);
         sentF.next = sentB;
         sentB.prev = sentF;
     }
     public LinkedListDeque(T x) {
         size = 1;
-        sentF = new Node(88, null, null);
-        sentB = new Node(99, null, null);
+        sentF = new Node(null, null, null);
+        sentB = new Node(null, null, null);
         sentF.next = new Node(x, sentF, sentB);
         sentB.prev = sentF.next;
     }
@@ -34,18 +34,17 @@ public class LinkedListDeque<T> {
     public void addFirst(T item) {
         size += 1;
         sentF.next = new Node(item, sentF, sentF.next);
+        sentF.next.next.prev = sentF.next;
     }
 
     public void addLast(T item) {
         size += 1;
         sentB.prev = new Node(item, sentB.prev, sentB);
+        sentB.prev.prev.next = sentB.prev;
     }
 
     public boolean isEmpty() {
-        if (size = 0) {
-            return true;
-        }
-        return false;
+        return size == 0;
     }
 
     public int size() {
@@ -91,4 +90,17 @@ public class LinkedListDeque<T> {
         return temp.item;
     }
 
+    public T getRecursiveHelper(Node currentNode, int index) {
+        if (index == 0) {
+            return currentNode.item;
+        }
+        return getRecursiveHelper(currentNode.next, index - 1);
+    }
+
+    public T getRecursive(int index) {
+        if (index >= size) {
+            return null;
+        }
+        return getRecursiveHelper(sentF.next, index);
+    }
 }
