@@ -1,10 +1,10 @@
 public class LinkedListDeque<T> {
-    public class Node {
+    private class Node {
         private  Node prev;
         private T item;
         private Node next;
 
-        public Node(T i, Node p, Node n) {
+        private Node(T i, Node p, Node n) {
             prev = p;
             item = i;
             next = n;
@@ -21,13 +21,6 @@ public class LinkedListDeque<T> {
         sentB = new Node(null, null, null);
         sentF.next = sentB;
         sentB.prev = sentF;
-    }
-    public LinkedListDeque(T x) {
-        size = 1;
-        sentF = new Node(null, null, null);
-        sentB = new Node(null, null, null);
-        sentF.next = new Node(x, sentF, sentB);
-        sentB.prev = sentF.next;
     }
 
     //方法
@@ -90,7 +83,7 @@ public class LinkedListDeque<T> {
         return temp.item;
     }
 
-    public T getRecursiveHelper(Node currentNode, int index) {
+    private T getRecursiveHelper(Node currentNode, int index) {
         if (index == 0) {
             return currentNode.item;
         }

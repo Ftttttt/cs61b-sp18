@@ -11,7 +11,7 @@ public class ArrayDeque<T> {
         sentB = -1;
     }
 
-    public void resize(int capacity) {
+    private void resize(int capacity) {
         T[] a = (T []) new Object[capacity];
         System.arraycopy(items, 0, a, 0, size);
         items = a;
@@ -56,7 +56,6 @@ public class ArrayDeque<T> {
     }
 
     public int size() {
-        //return (sentB + items.length -sentF + 1) % items.length;
         return size;
     }
 
