@@ -88,8 +88,8 @@ public class ArrayDeque<T> {
             nextFirst = items.length - 1;
             nextLast = size;
         }
-        T temp = items[((nextFirst - 1) + items.length) % items.length];
-        nextFirst = ((nextFirst - 1) + items.length) % items.length;
+        T temp = items[((nextLast - 1) + items.length) % items.length];
+        nextLast = ((nextLast - 1) + items.length) % items.length;
         size = size - 1;
 
         return temp;
