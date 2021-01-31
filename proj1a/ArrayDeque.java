@@ -1,132 +1,105 @@
 public class ArrayDeque<T> {
-    private T[] items;
     private int size;
-    private int sentF;
-    private int sentB;
+    private T[] items;
+    private int nextFirst;
+    private int nextLast;
+
 
     public ArrayDeque() {
-        items = (T []) new Object[8];
-        size = 0;
-        sentF = -1;
-        sentB = -1;
+        this.items = (T[]) new Object[8];
+        this.size = 0;
+        this.nextFirst = 4;
+        this.nextLast = 5;
     }
 
-    private void resize(int capacity) {
+    private void getBiggerSize(int capacity) {
         T[] a = (T []) new Object[capacity];
         System.arraycopy(items, 0, a, 0, size);
         items = a;
     }
 
+    private void getSmallerSize(int capacity) {
+        T[] a = (T []) new Object[capacity];
+        for (int i = 0; i < size; i++) {
+            a[i] = items[(i + nextFirst + 1) % items.length];
+        }
+        items = a;
+    }
+
     public void addFirst(T item) {
-        size += 1;
+        items[nextFirst] = item;
+        size = size + 1;
+        nextFirst = ((nextFirst - 1) + items.length) % items.length;
         if (size == items.length) {
-            resize(size + 1);
+            getBiggerSize(size + 5);
+            nextFirst = items.length - 1;
+            nextLast = size;
         }
-        if (sentF == -1) {
-            sentF = 0;
-            sentB = 0;
-        }
-        if (sentF == 0) {
-            sentF = items.length - 1; 
-        } else {
-            sentF -= 1;
-        }
-        items[sentF] = item;
     }
 
     public void addLast(T item) {
-        size += 1;
+        items[nextLast] = item;
+        size = size + 1;
+        nextLast = (nextLast + 1) % items.length;
         if (size == items.length) {
-            resize(size + 1);
+            getBiggerSize(size + 5);
+            nextFirst = items.length - 1;
+            nextLast = size;
         }
-        if (sentF == -1) {
-            sentF = 0;
-            sentB = 0;
-        }
-        if (sentB == items.length - 1) {
-            sentB = 0; 
-        } else {
-            sentB += 1;
-        }
-        items[sentB] = item;
     }
 
     public boolean isEmpty() {
-        return sentF == -1;
+        return  this.size == 0;
     }
 
     public int size() {
-        return size;
+        return this.size;
     }
 
     public void printDeque() {
-        if (sentF == -1) {
-            return;
+        for (int i = (nextFirst + 1) % items.length; i != nextLast; i++, i = i % items.length) {
+            System.out.print(items[i] + " ");
         }
-        if (sentF <= sentB) {
-            for (int i = sentF; i < sentB; i++) {
-                System.out.print(items[i] + " ");
-            }
-            System.out.println(items[sentB]);
-        } else {
-            for (int i = sentF; i <= items.length - 1; i++) {
-                System.out.print(items[i] + " ");
-            }
-            for (int i = 0; i < sentB; i++) {
-                System.out.print(items[i] + " ");
-            }
-            System.out.println(items[sentB]);
-        }
+        System.out.println();
     }
 
     public T removeFirst() {
-        if (sentF == -1) {
+        if (size == 0) {
             return null;
         }
-        T temp = items[sentF];
-        size -= 1;
-        if (size == 0) {
-            sentF = -1;
-            sentB = -1;
+        if (size == items.length / 2) {
+            getSmallerSize(items.length / 2 + 5);
+            nextFirst = items.length - 1;
+            nextLast = size;
         }
-        //sentF = (sentF + 1) % items.length;
-        if (sentF == items.length - 1) {
-            sentF = 0;
-        } else {
-            sentF = sentF - 1;
-        }
+        T temp = items[(nextFirst + 1) % items.length];
+        nextFirst = (nextFirst + 1) % items.length;
+        size = size - 1;
 
         return temp;
     }
 
     public T removeLast() {
-        if (sentF == -1) {
+        if (size == 0) {
             return null;
         }
-        T temp = items[sentB];
-        size -= 1;
-        if (size == 0) {
-            sentF = -1;
-            sentB = -1;
+        if (size == items.length / 2) {
+            getSmallerSize(items.length / 2 + 5);
+            nextFirst = items.length - 1;
+            nextLast = size;
         }
-        if (sentB == 0) {
-            sentB = items.length - 1;
-        } else {
-            sentB = sentB - 1;
-        }
-        
+        T temp = items[((nextFirst - 1) + items.length) % items.length];
+        nextFirst = ((nextFirst - 1) + items.length) % items.length;
+        size = size - 1;
+
         return temp;
     }
 
     public T get(int index) {
-        if (sentF == -1) {
+        int first = (nextFirst + 1) % items.length;
+        if (index > size - 1) {
             return null;
         }
-        if (index > size) {
-            return null;
-        } else {
-            int num = (sentF + index + items.length - 1) % items.length;
-            return items[num];
-        }
+        return items[(first + index) % items.length];
     }
 }
